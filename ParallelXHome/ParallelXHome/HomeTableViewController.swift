@@ -10,13 +10,14 @@ import UIKit
 
 class HomeTableViewController: UITableViewController {
 
+    var offset:CGFloat = 40.0
     let images = Gallery.allImages()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.tableView!.backgroundColor = UIColor.clearColor()
-        self.tableView!.decelerationRate = UIScrollViewDecelerationRateFast
+        self.tableView!.decelerationRate = UIScrollViewDecelerationRateNormal
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -50,12 +51,26 @@ class HomeTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        let transformation = CATransform3DTranslate(CATransform3DIdentity, 0, 30, -30)
+        let transformation = CATransform3DTranslate(CATransform3DIdentity, 0, self.offset, 0)
         cell.layer.transform = transformation
         
-        UIView.animateWithDuration(1.5) {
+        UIView.animateWithDuration(1.0, delay: 0.5, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
             cell.layer.transform = CATransform3DIdentity
+            }, completion: nil)
+//        UIView.animateWithDuration(1.5,) {
+//            
+//        }
+    }
+    
+    override func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        if targetContentOffset.memory.y < scrollView.contentOffset.y {
+            self.offset = -40
+            
+        } else {
+            self.offset = 40
         }
+        
     }
 
 }
